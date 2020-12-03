@@ -1,0 +1,91 @@
+/* Copyright (c) 2013, Code Aurora Forum. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "../msm8909-lge-common/dsi-panel-lgd-lg4894-hd-video.dtsi"
+#include "../msm8909-lge-common/dsi-panel-tvs-td4100-hd-video.dtsi"
+#include "../msm8909-lge-common/msm8909-backlight-rt4832.dtsi"
+
+&mdss_mdp {
+		qcom,mdss-pref-prim-intf = "dsi";
+		mdss_fb0: qcom,mdss_fb_primary {
+			qcom,mdss-fb-format = "rgba8888";
+		};
+};
+
+&mdss_dsi0 {
+		qcom,dsi-pref-prim-pan = <&dsi_tvs_td4100_hd_video>;
+		qcom,platform-reset-gpio = <&msm_gpio 3 0>;
+		qcom,platform-enable-gpio = <&msm_gpio 23 0>;
+
+		qcom,panel-supply-entries {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			qcom,panel-supply-entry@0 {
+				reg = <0>;
+				qcom,supply-name = "vdd";
+				qcom,supply-min-voltage = <3000000>;
+				qcom,supply-max-voltage = <3000000>;
+				qcom,supply-enable-load = <100000>;
+				qcom,supply-disable-load = <100>;
+			};
+
+			qcom,panel-supply-entry@1 {
+				reg = <1>;
+				qcom,supply-name = "vddio";
+				qcom,supply-min-voltage = <1800000>;
+				qcom,supply-max-voltage = <1800000>;
+				qcom,supply-enable-load = <100000>;
+				qcom,supply-disable-load = <100>;
+				qcom,supply-post-on-sleep = <1>;
+			};
+		};
+};
+
+&i2c_6 {
+	rt4832@11 {
+		richtek,bl-en-gpio = <&msm_gpio 23 0x00>;
+		backlight {
+			initial-brightness = <255>;
+			// 11 bit control blmap
+			blmap = <
+			//	0	1	2	3	4	5	6	7	8	9	 INDEX
+				14	14	14	14	14	14	14	14	14	14
+				14	14	15	16	17	18	18	19	20	21	//  1X
+				22	22	23	24	25	26	26	27	28	29
+				30	30	31	32	33	34	34	35	36	37	//  3X
+				38	38	39	40	41	42	42	43	44	45
+				46	46	47	48	49	50	50	51	52	53	//  5X
+				54	56	59	62	65	68	71	73	76	79
+				82	85	88	90	93	96	99	102	105	107	//  7X
+				110	113	116	119	122	124	127	130	133	136
+				139	141	144	147	150	153	156	158	161	164	//  9X
+				167	170	173	175	178	181	184	187	190	195
+				200	205	211	216	221	227	232	237	243	248	// 11X
+				253	258	264	269	274	280	285	290	296	301
+				306	312	317	322	327	333	338	343	349	354	// 13X
+				359	365	370	375	381	386	391	396	402	407
+				412	418	423	428	434	439	444	450	458	466	// 15X
+				475	483	492	500	509	517	526	534	542	551
+				559	568	576	585	593	602	610	618	627	635	// 17X
+				644	652	661	669	678	686	695	703	711	720
+				728	737	745	754	762	771	779	787	796	804	// 19X
+				813	821	830	838	847	855	864	876	888	901
+				913	926	938	951	963	976	988	1000	1013	1025	// 21X
+				1038	1050	1063	1075	1088	1100	1112	1125	1137	1150
+				1162	1175	1187	1200	1212	1225	1237	1249	1262	1274	// 23X
+				1287	1299	1312	1324	1337	1349	1361	1374	1386	1399
+				1411	1424	1436	1449	1461	1474					// 25X
+			>;
+		};
+	};
+};

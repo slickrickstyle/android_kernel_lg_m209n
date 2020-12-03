@@ -1,0 +1,112 @@
+#
+# Input misc drivers configuration
+#
+menuconfig INPUT_SENSOR
+       bool "Sensor devices"
+       help
+         Say Y here, and a list of Sensor input drivers will be displayed.
+         Everything that didn't fit into the other categories is here. This option
+         doesn't affect the kernel.
+
+         If unsure, say Y.
+
+if INPUT_SENSOR
+
+config SENSOR_APDS9130
+       bool "APDS 9130 support"
+       depends on I2C
+       help
+         Support APDS-9130 as an input device.
+
+config SENSOR_APDS993X
+       bool "APDS 993X support"
+       depends on I2C
+       help
+         Support APDS-993X as an input device.
+
+config SENSOR_RPR0521
+	bool "RPR 0521 support"
+	depends on I2C
+	help
+	  Support RPR-0521 as an input device.
+
+config SENSOR_RPR0521_ALS_INT_ENABLE
+    bool "RPR 0521 light interrupt support"
+    depends on I2C
+    help
+      Support RPR-0521 light interrupt as an input device.
+
+config APDS9930_BMCHAL
+	tristate "Avago APDS9930 combined als and proximity sensors"
+	depends on I2C
+	help
+	  Say Y here if you want to build a driver for Avago APDS9930
+	  combined ambient light and proximity sensor chip.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called apds9950. If unsure, say N here.
+config APDS9930_ALS_INT
+	tristate "Avago APDS9930 combined als and proximity sensors"
+	depends on I2C
+	help
+	  Support apds9930 as an IRQ input device.
+
+config APDS9930_DEBUG_BMCHAL
+	tristate "Avago APDS9930 debug option"
+	depends on I2C
+        help
+	  Say Y here if you want to look debug log.
+
+config APDS9930_REGULATOR_ALAWAY_ON
+	tristate "Avago APDS9930 regulator option"
+	depends on APDS9930_BMCHAL
+	help
+		Say Y here if you don't want to control regulator.
+
+config SENSORS_K2HH
+	bool "K2HH support"
+	depends on I2C
+	help
+		Support ST Micro Accel Sensor K2HH as an input device.
+
+config SENSORS_BMC150_COMMON
+	bool
+	default n
+
+config SENSORS_BMC150
+	tristate "BMC150 acceleration and magnetic sensor support"
+	depends on I2C=y
+	select SENSORS_BMC150_COMMON
+	help
+	  If you say yes here you get support for Bosch Sensortec's
+	  acceleration sensors BMA255/BMA250E/BMA222E/BMA280.
+
+config SENSORS_BMC150_ENABLE_INT1
+	tristate "BMC150 sensor interrupt INT1 support"
+	depends on SENSORS_BMC150
+	help
+	  If you say yes here, you get INT1 support for Bosch Sensortec
+	  sensors BMC150.
+
+config SENSORS_K303B
+	tristate "STM K303B 6axis axl+mag sensor support"
+	depends on I2C=y
+	help
+	  If you say yes here you get support for STMicroelectronics's
+	  acceleration sesnsors K303B.
+
+config SENSORS_PAS230
+	depends on I2C
+	tristate "PAS230 ambient light and proximity input device"
+	default n
+	help
+	  This option enables proximity & light sensors using PAS230 driver.
+
+config SENSOR_PAS230_ALS_INT
+	depends on I2C
+	tristate "PAS230 ambient light and proximity input device"
+	default n
+	help
+		This option enables light sensors Interrupt mode using PAS230 driver.
+
+endif

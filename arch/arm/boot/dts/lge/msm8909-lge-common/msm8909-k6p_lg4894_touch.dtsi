@@ -1,0 +1,74 @@
+/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&soc {
+	i2c@78b9000 { /* BLSP1 QUP5 */
+		qcom,clk-freq-out = <400000>;
+
+		lg4894@28 {
+			status = "okay";
+			compatible = "lge,lg4894";
+			reg = <0x28>;
+
+			/* GPIOs */
+			reset-gpio	=	<&msm_gpio 2 0x00>;
+			irq-gpio	=	<&msm_gpio 25 0x2002>;
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <25 0x2002>;
+			irqflags = <0x2002>;
+			pinctrl-names = "touch_pin_active","touch_pin_sleep";
+			pinctrl-0 = <&ts_int_active &ts_reset_active>;
+			pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
+
+			/* Caps */
+			max_x = <720>;
+			max_y = <1280>;
+			max_pressure = <0xff>;
+			max_width = <15>;
+			max_orientation = <1>;
+			max_id = <10>;
+
+			/* role */
+			hw_reset_delay = <210>;
+			sw_reset_delay = <90>;
+			use_lpwg = <1>;
+			use_lpwg_test = <1>;
+
+			/* firmware */
+			use_fw_upgrade = <1>;
+			use_firmware = <0>;
+			fw_image = "sic/lg4894/k6p/L0W53K6P_0_13.img", /* for revision 6   */
+					   "sic/lg4894/k6p/L0W53K6P_0_26.img", /* for revision 7,8 */
+					   "sic/lg4894/k6p/L0W53K6P_0_48.img"; /* for revision 9   */
+			panel_spec = "sic/lg4894/k6p/k6p_limit.txt";
+			panel_spec_mfts_folder = "sic/lg4894/k6p/k6p_limit_mfts.txt";
+		};
+
+		synaptics@20 {
+			status = "okay";
+			compatible = "unified_driver_ver4,td4100";
+			reg = <0x20>;
+
+			interrupt-parent = <&msm_gpio>;
+			irq-gpio  =  <&msm_gpio 25 0x2002>;
+			interrupts = <25 0x2002>;
+			irqflags = <0x2002>;
+			reset-gpio = <&msm_gpio 2 0x00>;
+
+
+			pinctrl-names = "touch_pin_active","touch_pin_sleep";
+			pinctrl-0 = <&ts_int_active &ts_reset_active>;
+			pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
+		};
+	};
+};
+

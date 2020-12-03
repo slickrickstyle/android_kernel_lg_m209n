@@ -1,0 +1,84 @@
+/* Copyright (c) 2013, Code Aurora Forum. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "../msm8909-lge-common/dsi-panel-lgd-ssd2068-fwvga-video.dtsi"
+#include "../msm8909-lge-common/msm8909-backlight-rt4832.dtsi"
+
+&mdss_mdp {
+		qcom,mdss-pref-prim-intf = "dsi";
+};
+
+&mdss_dsi0 {
+		qcom,dsi-pref-prim-pan = <&dsi_lgd_incell_ssd2068_fwvga_video>;
+		qcom,platform-reset-gpio = <&msm_gpio 25 0>;
+		qcom,platform-enable-gpio = <&msm_gpio 24 0>;
+		lge,platform-mfts-ldo-en-gpio = <&msm_gpio 16 0>;
+		lge,dsv-toggle-enabled;
+
+		qcom,panel-supply-entries {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			qcom,panel-supply-entry@0 {
+				reg = <0>;
+				qcom,supply-name = "vdd";
+				qcom,supply-min-voltage = <3000000>;
+				qcom,supply-max-voltage = <3000000>;
+				qcom,supply-enable-load = <100000>;
+				qcom,supply-disable-load = <100>;
+			};
+
+			qcom,panel-supply-entry@1 {
+				reg = <1>;
+				qcom,supply-name = "vddio";
+				qcom,supply-min-voltage = <1800000>;
+				qcom,supply-max-voltage = <1800000>;
+				qcom,supply-enable-load = <100000>;
+				qcom,supply-disable-load = <100>;
+				qcom,supply-post-on-sleep = <1>;
+			};
+		};
+};
+
+&i2c_6 {
+	rt4832@11 {
+		backlight {
+			blmap = <
+				20	20	20	20	20	20	20	20	20	20 /* 0~9 */
+				20	20	20	20	20	20	21	21	21	22 /* 10~19 */
+				22	22	22	23	23	23	23	24	25	26 /* 20~29 */
+				27	28	29	30	31	32	32	32	33	33 /* 30~39 */
+				34	35	36	37	38	39	40	41	41	41 /* 40~49 */
+				41	44	46	47	49	51	53	55	58	60 /* 50~59 */
+				60	63	66	69	72	75	79	83	85	88 /* 60~69 */
+				90	90	90	90	90	93	96	99	103	107 /* 70~79 */
+				111	115	120	125	125	125	125	128	131	134 /* 80~89 */
+				137	140	143	145	146	148	150	150	150	150 /* 90~99 */
+				155	160	165	170	175	180	185	190	190	190 /* 100~109 */
+				194	198	201	205	208	210	213	215	220	224 /* 110~119 */
+				228	231	235	240	245	250	255	260	265	268 /* 120~129 */
+				271	275	278	281	285	287	290	293	297	301 /* 130~139 */
+				306	310	315	325	335	345	349	353	357	360 /* 140~149 */
+				367	374	381	390	395	400	405	407	408	410 /* 150~159 */
+				420	430	437	444	450	455	460	465	470	474 /* 160~169 */
+				477	480	500	504	507	511	515	530	535	540 /* 170~179 */
+				545	550	565	580	595	600	605	610	615	620 /* 180~189 */
+				625	633	640	647	655	661	668	672	676	680 /* 190~199 */
+				685	697	710	717	724	730	737	744	750	775 /* 200~209 */
+				788	800	805	810	815	825	835	842	848	855 /* 210~219 */
+				868	880	885	890	895	900	910	920	930	955 /* 220~229 */
+				965	975	987	1000	1008	1016	1025	1033	1041	1050 /* 230~239 */
+				1060	1070	1083	1095	1105	1115	1120	1130	1140	1145 /* 240~249 */
+				1150	1155	1160	1175	1190	1220>; /* 250~255 */
+		};
+	};
+};

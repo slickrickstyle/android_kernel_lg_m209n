@@ -1,0 +1,62 @@
+/* Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/dts-v1/;
+
+#include "msm8909-k6p_crk_us.dtsi"
+#include "../../qcom/msm8909-pm8916.dtsi"
+#include "msm8909-pm8916-k6p_crk_us.dtsi"
+
+/ {
+	model = "Qualcomm Technologies, Inc. MSM8909 PM8916 k6p_crk_us";
+	compatible = "qcom,msm8909";
+	qcom,board-id= <0x000264 0x02>, /* rev_0s  | LGE_PLATFORM_ID(0x64), LGE_SUBTYPE=(0:PM8909, 2:PM8916) */
+	               <0x000364 0x02>, /* rev_0m  | LGE_PLATFORM_ID(0x64), LGE_SUBTYPE=(0:PM8909, 2:PM8916) */
+				   <0x000464 0x02>; /* rev_a   | LGE_PLATFORM_ID(0x64), LGE_SUBTYPE=(0:PM8909, 2:PM8916) */
+};
+
+&soc {
+	i2c_4: i2c@78b8000 { /* BLSP4 : BLSP4 QUP3 */
+		status = "ok";
+
+		smb1351-charger@57 {
+			revision = "rev_0m...";
+			status = "ok";
+		};
+		smb1351-charger@1d {
+			revision = "...rev_0s";
+			status = "ok";
+		};
+	};
+
+	i2c@78b9000 { /* BLSP1 QUP5 */
+		lg4894@28 {
+			irq-gpio = <&msm_gpio 3 0x2002>;
+			interrupts = <3 0x2002>;
+			use_lpwg = <0>;
+		};
+	};
+
+	tlmm_pinmux: pinctrl@1000000 {
+		pmx_ts_int_active {
+			qcom,pins = <&gp 3>;
+		};
+
+		pmx_ts_int_suspend {
+			qcom,pins = <&gp 3>;
+		};
+	};
+};
+
+&mdss_dsi0 {
+	qcom,platform-reset-gpio = <&msm_gpio 25 0>;
+};

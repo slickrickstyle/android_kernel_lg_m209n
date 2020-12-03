@@ -1,0 +1,88 @@
+/* Copyright (c) 2013, Code Aurora Forum. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "../msm8909-lge-common/dsi-panel-tianma-ft860x-hd-video.dtsi"
+#include "../msm8909-lge-common/msm8909-backlight-rt4832.dtsi"
+
+&mdss_mdp {
+		qcom,mdss-pref-prim-intf = "dsi";
+		mdss_fb0: qcom,mdss_fb_primary {
+			qcom,mdss-fb-format = "rgba8888";
+		};
+};
+
+&mdss_dsi0 {
+		qcom,dsi-pref-prim-pan = <&dsi_tianma_ft860x_hd_video>;
+		qcom,platform-enable-gpio = <&msm_gpio 23 0>;
+		lge,platform-mfts-ldo-en-gpio = <&msm_gpio 16 0>;
+
+		qcom,panel-supply-entries {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			qcom,panel-supply-entry@0 {
+				reg = <0>;
+				qcom,supply-name = "vdd";
+				qcom,supply-min-voltage = <2800000>;
+				qcom,supply-max-voltage = <2800000>;
+				qcom,supply-enable-load = <100000>;
+				qcom,supply-disable-load = <100>;
+			};
+
+			qcom,panel-supply-entry@1 {
+				reg = <1>;
+				qcom,supply-name = "vddio";
+				qcom,supply-min-voltage = <1800000>;
+				qcom,supply-max-voltage = <1800000>;
+				qcom,supply-enable-load = <100000>;
+				qcom,supply-disable-load = <100>;
+				qcom,supply-post-on-sleep = <1>;
+			};
+		};
+};
+
+&i2c_6 {
+	rt4832@11 {
+		richtek,bl-en-gpio = <&msm_gpio 23 0x00>;
+
+		backlight {
+			initial-brightness = <255>;
+			blmap = <
+			20	20	20	20	20	20	20	20	20	20
+			20	20	21	22	23	24	25	26	26	27
+			28	29	30	31	32	32	33	34	35	36
+			37	38	38	39	40	41	42	43	44	44
+			45	46	47	48	49	50	50	51	52	53
+			54	55	56	56	57	58	59	60	61	62
+			63	66	69	72	75	78	81	84	87	90
+			93	96	99	102	105	108	111	114	117	120
+			123	126	129	132	135	138	141	144	147	150
+			153	156	159	162	165	168	171	174	177	180
+			183	186	189	192	195	198	201	204	208	213
+			218	223	228	233	238	243	248	254	259	264
+			269	274	279	284	289	295	300	305	310	315
+			320	325	330	336	341	346	351	356	361	366
+			371	377	382	387	392	397	402	407	412	418
+			423	428	433	438	443	448	453	459	467	475
+			483	491	500	508	516	524	533	541	549	557
+			566	574	582	590	599	607	615	623	632	640
+			648	656	665	673	681	689	698	706	714	722
+			731	739	747	755	764	772	780	788	797	805
+			813	821	830	838	846	854	863	875	887	899
+			911	923	936	948	960	972	984	997	1009	1021
+			1033	1045	1057	1070	1082	1094	1106	1118	1131	1143
+			1155	1167	1179	1191	1204	1216	1228	1240	1252	1265
+			1277	1289	1301	1313	1325	1338	1350	1362	1374	1386
+			1399	1411	1423	1435	1447	1460>;
+		};
+	};
+};

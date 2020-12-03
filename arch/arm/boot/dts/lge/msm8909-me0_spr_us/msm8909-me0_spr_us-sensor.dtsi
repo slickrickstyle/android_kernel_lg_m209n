@@ -1,0 +1,90 @@
+/* Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&i2c_1 { /* BLSP1 QUP1 */
+	/* Proximity sensor*/
+	avago9930@39 {
+		compatible = "avago,apds9930";
+		status = "ok";
+		reg = <0x39>;
+		pinctrl-names = "default","sleep";
+		pinctrl-0 = <&apds9930_int_active>;
+		pinctrl-1 = <&apds9930_int_suspend>;
+		interrupt-parent = <&msm_gpio>;
+		interrupts = <95 0x2>;
+		avago,vdd_ana-supply = <&pm8916_l17>;
+		avago,vddio_i2c-supply = <&pm8916_l6>;
+		avago,irq-gpio = <&msm_gpio 95 0x2>;
+		avago,ps_threshold = <300>;
+		avago,ps_hysteresis_threshold = <220>;
+		avago,ps_pulse = <8>;
+		avago,ps_pgain = <0x08>;
+		avago,als_B = <169>;
+		avago,als_C = <74>;
+		avago,als_D = <132>;
+		avago,ga_value = <147>;
+		avago,i2c-pull-up;
+		avago,vdd_ana_supply_min = <2800000>;
+		avago,vdd_ana_supply_max = <2800000>;
+		avago,vdd_ana_load_ua = <15000>;
+		avago,vddio_dig_supply_min = <1800000>;
+		avago,vddio_dig_supply_max = <1800000>;
+		avago,vddio_dig_load_ua = <10000>;
+		avago,vddio_i2c_supply_min = <1800000>;
+		avago,vddio_i2c_supply_max = <1800000>;
+		avago,vddio_i2c_load_ua = <10000>;
+	 };
+
+	/* Acceleration sensor */
+	bosch_bma2x2@18 {
+		compatible = "bosch,bma2x2";
+		status = "ok";
+		reg = <0x18>;
+		interrupt-parent = <&msm_gpio>;
+		interrupts = <96 0x2>;
+		Bosch,vdd_ana-supply = <&pm8916_l6>;
+		Bosch,vddio_i2c-supply = <&pm8916_l6>;
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&bma2x2_int_active>;
+		pinctrl-1 = <&bma2x2_int_suspend>;
+		Bosch,irq-gpio = <&msm_gpio 96 0x00>;
+		Bosch,i2c-pull-up;
+		Bosch,vdd_ana_supply_min = <1800000>;
+		Bosch,vdd_ana_supply_max = <1800000>;
+		Bosch,vdd_ana_load_ua = <10000>;
+		Bosch,vddio_dig_supply_min = <1800000>;
+		Bosch,vddio_dig_supply_max = <1800000>;
+		Bosch,vddio_dig_load_ua = <10000>;
+		Bosch,vddio_i2c_supply_min = <1800000>;
+		Bosch,vddio_i2c_supply_max = <1800000>;
+		Bosch,vddio_i2c_load_ua = <10000>;
+		place = <6>;
+		cal_range = <3>; //RANGE 2G:3 4G:5 8G:8 16G:12
+	};
+};
+
+/*sysfs node for unified usercal*/
+/{
+	lge,sensor-sysfs {
+		compatible = "lge,sensor-sysfs";
+
+		sysfs,node =
+			/* group , user_node,  kernel node */
+			"accelerometer", "run_calibration",  "/sys/devices/virtual/input/lge_accelerometer/run_fast_calibration",
+			"accelerometer", "selftest",         "/sys/devices/virtual/input/lge_accelerometer/selftest",
+//			"gyroscope",     "run_calibration",  "/sys/devices/virtual/input/lge_gyroscope/run_calibration",
+//			"gyroscope",     "selftest",         "/sys/devices/virtual/input/lge_gyroscope/selftest",
+			"proximity",     "run_calibration",  "/sys/devices/virtual/input/lge_proximity/run_calibration",
+			"proximity",     "calibration_data", "/sys/devices/virtual/input/lge_proximity/prox_cal_data"
+			;
+	};
+};

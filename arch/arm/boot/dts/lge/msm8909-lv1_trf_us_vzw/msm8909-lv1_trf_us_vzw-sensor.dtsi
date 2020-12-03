@@ -1,0 +1,98 @@
+/* Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&i2c_1 { /* BLSP1 QUP1 */
+
+		k2hh@1d {
+			status = "ok";
+			reg = <0x1d>;
+			compatible = "st,k2hh";
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <96 0x0>;
+			stm,sensor_vdd-supply = <&pm8916_l17_sns>;
+			stm,sensor_vcc_i2c-supply = <&pm8916_l6>;
+			pinctrl-names = "k2hh_int_active", "k2hh_int_suspend";
+			pinctrl-0 = <&k2hh_int_active>;
+			pinctrl-1 = <&k2hh_int_suspend>;
+			st,gpio-int = <&msm_gpio 96 0x0>;
+			axis_map_x = <1>;
+			axis_map_y = <0>;
+			axis_map_z = <2>;
+			negate_x = <1>;
+			negate_y = <0>;
+			negate_z = <1>;
+			poll_interval = <100>;
+			min_interval = <9>;
+			fs_range = <32>;
+		};
+
+
+		/* Ambient Light and Proximity Sensor Driver */
+		rpr05210@38 {
+			status = "ok";
+			reg = <0x38>;
+			compatible = "rohm,rpr0521";
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <95 0x2>;
+			Rohm,vdd-supply = <&pm8916_l17_sns>;
+			Rohm,vcc_i2c-supply = <&pm8916_l6>;
+			pinctrl-names = "default", "sleep";
+			pinctrl-0 = <&rpr0521_int_active>;
+			pinctrl-1 = <&rpr0521_int_suspend>;
+			Rohm,i2c-pull-up;
+			Rohm,irq-gpio = <&msm_gpio 95 0x0>;
+			Rohm,pulse = <0>;
+			Rohm,mode = <0>;
+			Rohm,measure_time = <6>;
+			Rohm,led_current = <2>;
+			Rohm,als_gain = <0xA>;
+			Rohm,infrared_level = <0>;
+			Rohm,ps_gain = <2>;
+			Rohm,persistence = <2>;
+			Rohm,near_offset = <92>;
+			Rohm,far_offset = <7>;
+			Rohm,default_cross_talk = <63>;
+            Rohm,bright_threshold = <90>;
+            Rohm,dark_threshold = <30>;
+            Rohm,judge_coef0 = <1325>;
+            Rohm,judge_coef1 = <1438>;
+            Rohm,judge_coef2 = <1890>;
+            Rohm,judge_coef3 = <4023>;
+            Rohm,data0_coef0 = <2770>;
+            Rohm,data0_coef1 = <3532>;
+            Rohm,data0_coef2 = <1971>;
+            Rohm,data0_coef3 = <1633>;
+            Rohm,data1_coef0 = <1094>;
+            Rohm,data1_coef1 = <1669>;
+            Rohm,data1_coef2 = <584>;
+            Rohm,data1_coef3 = <405>;
+
+		};
+
+};
+
+/*sysfs node for unified usercal*/
+/{
+	lge,sensor-sysfs {
+		compatible = "lge,sensor-sysfs";
+
+		sysfs,node =
+			/* group , user_node,  kernel node */
+			"accelerometer", "run_calibration",  "/sys/devices/virtual/input/lge_accelerometer/run_fast_calibration",
+			"accelerometer", "selftest",         "/sys/devices/virtual/input/lge_accelerometer/selftest",
+//			"gyroscope",     "run_calibration",  "/sys/devices/virtual/input/lge_gyroscope/run_calibration",
+//			"gyroscope",     "selftest",         "/sys/devices/virtual/input/lge_gyroscope/selftest",
+			"proximity",     "run_calibration",  "/sys/devices/virtual/input/lge_proximity/run_calibration",
+			"proximity",     "calibration_data", "/sys/devices/virtual/input/lge_proximity/prox_cal_data"
+			;
+	};
+};

@@ -1,0 +1,78 @@
+/* Copyright (c) 2013, Code Aurora Forum. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "../msm8909-lge-common/dsi-panel-tcl-oncell-ili9806e-fwvga-video.dtsi"
+#include "../msm8909-lge-common/msm8909-backlight-rt8542.dtsi"
+
+&mdss_mdp {
+	qcom,mdss-pref-prim-intf = "dsi";
+};
+
+&pmx_mdss {
+	qcom,num-grp-pins = <1>;
+	qcom,pins = <&gp 25>;
+};
+
+&mdss_dsi0 {
+	qcom,dsi-pref-prim-pan = <&dsi_tcl_oncell_ili9806e_fwvga_video>;
+	pinctrl-names = "mdss_default", "mdss_sleep";
+	pinctrl-0 = <&mdss_dsi_active>;
+	pinctrl-1 = <&mdss_dsi_suspend>;
+
+	qcom,platform-reset-gpio = <&msm_gpio 25 0>;
+
+	qcom,panel-supply-entries {
+		#address-cells = <1>;
+		#size-cells = <0>;
+			qcom,panel-supply-entry@0 {
+			reg = <0>;
+			qcom,supply-name = "vddio";
+			qcom,supply-min-voltage = <1800000>;
+			qcom,supply-max-voltage = <1800000>;
+			qcom,supply-enable-load = <100000>;
+			qcom,supply-disable-load = <100>;
+			qcom,supply-post-on-sleep = <1>;
+		};
+			qcom,panel-supply-entry@1 {
+			reg = <1>;
+			qcom,supply-name = "vdd";
+			qcom,supply-min-voltage = <2800000>;
+			qcom,supply-max-voltage = <2800000>;
+			qcom,supply-enable-load = <100000>;
+			qcom,supply-disable-load = <100>;
+		};
+	};
+};
+
+&i2c_6 {
+	rt8542@39 {
+		richtek,bl-en-gpio = <&msm_gpio 24 0x00>;
+
+		backlight {
+			blmap = <
+				1 1 1 1 1 1 1 2 2 2                     /*0~9*/
+				2 2 2 2 2 2 2 3 3 3                     /*10~19*/
+				3 3 3 3 3 4 4 4 4 4                     /*20~29*/
+				4 4 6 7 7 8 8 9 9 9                     /*30~39*/
+				9 9 10 10 10 10 10 11 11 12             /*40~49*/
+				12 12 12 13 13 14 15 16 17 18           /*50~59*/
+				19 20 20 21 21 21 21 23 24 24           /*60~69*/
+				26 26 26 27 28 29 32 32 32 32           /*70~79*/
+				32 34 34 37 37 37 42 42 42 43           /*80~89*/
+				43 43 43 43 48 48 51 51 51 56           /*90~99*/
+				56 56 59 59 59 59 59 63 65 67           /*100~109*/
+				69 71 74 76 77 78 78 78 78 78           /*110~119*/
+				82 86 90 94 96 97 97 97>;               /*120~127*/
+		};
+	};
+};
+

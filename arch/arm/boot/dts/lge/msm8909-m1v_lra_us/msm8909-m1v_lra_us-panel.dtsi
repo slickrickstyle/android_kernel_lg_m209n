@@ -1,0 +1,79 @@
+/* Copyright (c) 2013, Code Aurora Forum. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "../msm8909-lge-common/dsi-panel-lgd-db7400-720p-5inch-video.dtsi"
+#include "../msm8909-lge-common/msm8909-backlight-rt4832.dtsi"
+
+&mdss_mdp {
+		qcom,mdss-pref-prim-intf = "dsi";
+		mdss_fb0: qcom,mdss_fb_primary {
+			qcom,mdss-fb-format = "rgba8888";
+		};
+};
+
+&mdss_dsi0 {
+		qcom,dsi-pref-prim-pan = <&dsi_lgd_db7400_hd_5inch_incell_vid>;
+		qcom,platform-reset-gpio = <&msm_gpio 25 0>;
+
+		qcom,panel-supply-entries {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			qcom,panel-supply-entry@0 {
+				reg = <0>;
+				qcom,supply-name = "vdd";
+				qcom,supply-min-voltage = <3000000>;
+				qcom,supply-max-voltage = <3000000>;
+				qcom,supply-enable-load = <100000>;
+				qcom,supply-disable-load = <100>;
+			};
+
+			qcom,panel-supply-entry@1 {
+				reg = <1>;
+				qcom,supply-name = "vddio";
+				qcom,supply-min-voltage = <1800000>;
+				qcom,supply-max-voltage = <1800000>;
+				qcom,supply-enable-load = <100000>;
+				qcom,supply-disable-load = <100>;
+				qcom,supply-post-on-sleep = <1>;
+			};
+		};
+};
+&i2c_6 {
+	rt4832@11 {
+		backlight {
+			initial-brightness = <162>;
+			blmap = <
+				20       20     20   20     20     20     20     20     20     20   20  20 20 20 20 20
+				21       21     21   22     22     22     22     23     23
+				23       23     24   25     26     27     28     29     30     31    32  32
+				32       33     33   34     35     36     37     38     39     40    41  41    41
+				41       44     46   47     49     51     53     55     58     60
+				60       63     66   69     72     75     79     83     85     88   90  90   90 90
+				90       93   96    99    103   107   111   115   120    125   125  125
+				125     128   131  134    137   140   143   145   146    148   150  150   150
+				150     155   160  165    170   175   180   185   190    195   200  200
+				200     205   210  216    222   229   235   242   246    250   255  255
+				255     260   265  270    275   280   285   290   295    303   310  310
+				310     318   326  334    342   348   356   364   372    376   380  380
+				380     400   408  415    425   430   440   450   455    460   470  470   470
+				470     480   490  500    510   520   530   540   550    560   570  570
+				570     570   580  590    605   620   630   640   650    660   660  660
+				660     670   680  690    700   710   720   730   740    755   770  770   770
+				770     777   784  791    798   805   812   819   826    830   830
+				830     847   864  881    895   910   930   950   970    990   990  990
+				990    1002  1015 1020  1025  1035 1050 1070 1090   1100  1110  1110
+				1100   1120  1140 1155  1170  1185 1200 1210 1230   1250 1250  1250  1250
+				1250   1270  1290 1305  1320  1335 1350 1360 1370   1380 1380>;
+		};
+	};
+};

@@ -1,0 +1,98 @@
+/* Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&i2c_1 { /* BLSP1 QUP1 */
+	/* Ambient Light and Proximity Sensor Driver */
+	rpr05210@38 {
+		status = "ok";
+		reg = <0x38>;
+		compatible = "rohm,rpr0521";
+		interrupt-parent = <&msm_gpio>;
+		interrupts = <95 0x2>;
+		Rohm,vdd-supply = <&pm8916_l17>;
+		Rohm,vcc_i2c-supply = <&pm8916_l6>;
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&rpr0521_int_active>;
+		pinctrl-1 = <&rpr0521_int_suspend>;
+		Rohm,i2c-pull-up;
+		Rohm,irq-gpio = <&msm_gpio 95 0x0>;
+		Rohm,pulse = <0>;
+		Rohm,mode = <0>;
+		Rohm,measure_time = <6>;
+		Rohm,led_current = <2>;
+		Rohm,als_gain = <0>;
+		Rohm,infrared_level = <0>;
+		Rohm,ps_gain = <2>;
+		Rohm,persistence = <2>;
+		Rohm,near_offset = <38>;
+		Rohm,far_offset = <11>;
+		Rohm,default_cross_talk = <1>;
+		Rohm,bright_threshold = <90>;
+		Rohm,dark_threshold = <30>;
+		Rohm,judge_coef0 = <1558>;
+		Rohm,judge_coef1 = <1733>;
+		Rohm,judge_coef2 = <2116>;
+		Rohm,judge_coef3 = <4078>;
+		Rohm,data0_coef0 = <3907>;
+		Rohm,data0_coef1 = <4682>;
+		Rohm,data0_coef2 = <2835>;
+		Rohm,data0_coef3 = <1518>;
+		Rohm,data1_coef0 = <1562>;
+		Rohm,data1_coef1 = <2059>;
+		Rohm,data1_coef2 = <994>;
+		Rohm,data1_coef3 = <372>;
+	};
+	
+	/* Acceleration sensor */
+	bosch_bma2x2@18 {
+		compatible = "bosch,bma2x2";
+		status = "ok";
+		reg = <0x18>;
+		interrupt-parent = <&msm_gpio>;
+		interrupts = <96 0x2>;
+		Bosch,vdd_ana-supply = <&pm8916_l6>;
+		Bosch,vddio_i2c-supply = <&pm8916_l6>;
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&bma2x2_int_active>;
+		pinctrl-1 = <&bma2x2_int_suspend>;
+		Bosch,irq-gpio = <&msm_gpio 96 0x00>;
+		Bosch,i2c-pull-up;
+		Bosch,vdd_ana_supply_min = <1800000>;
+		Bosch,vdd_ana_supply_max = <1800000>;
+		Bosch,vdd_ana_load_ua = <10000>;
+		Bosch,vddio_dig_supply_min = <1800000>;
+		Bosch,vddio_dig_supply_max = <1800000>;
+		Bosch,vddio_dig_load_ua = <10000>;
+		Bosch,vddio_i2c_supply_min = <1800000>;
+		Bosch,vddio_i2c_supply_max = <1800000>;
+		Bosch,vddio_i2c_load_ua = <10000>;
+		place = <4>;
+		cal_range = <5>; //RANGE 2G:3 4G:5 8G:8 16G:12
+	};
+};
+
+/*sysfs node for unified usercal*/
+/{
+	lge,sensor-sysfs {
+		compatible = "lge,sensor-sysfs";
+
+		sysfs,node =
+			/* group , user_node,  kernel node */
+			"accelerometer", "run_calibration",  "/sys/devices/virtual/input/lge_accelerometer/run_fast_calibration",
+			"accelerometer", "selftest",         "/sys/devices/virtual/input/lge_accelerometer/selftest",
+//			"gyroscope",     "run_calibration",  "/sys/devices/virtual/input/lge_gyroscope/run_calibration",
+//			"gyroscope",     "selftest",         "/sys/devices/virtual/input/lge_gyroscope/selftest",
+			"proximity",     "run_calibration",  "/sys/devices/virtual/input/lge_proximity/run_calibration",
+			"proximity",     "calibration_data", "/sys/devices/virtual/input/lge_proximity/prox_cal_data"
+			;
+	};
+};
